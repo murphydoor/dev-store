@@ -2,11 +2,10 @@
 Exercise: Debug the Product Variant Selection Issues
 
 Bugs to find:
-1. Price not updating when variant is selected - check product-info data attributes
-2. Product media gallery not syncing with variant selection - investigate variant-media relationship
-3. Inventory status shows incorrect availability - review inventory management logic
-4. Add to cart button remains enabled for out-of-stock variants - examine button state handling
-5. Quantity selector allows invalid values - check input validation
+1. Price not updating when variant is selected - check product-info data attributes (https://quickstart-dc8e271b.myshopify.com/products/selling-plans-ski-wax)
+2. Product media gallery not syncing with variant selection - investigate variant-media relationship (https://quickstart-dc8e271b.myshopify.com/products/selling-plans-ski-wax)
+3. Add to cart button remains enabled for out-of-stock variants - examine button state handling (https://quickstart-dc8e271b.myshopify.com/products/the-out-of-stock-snowboard)
+4. Quantity selector allows invalid values - check input validation (https://quickstart-dc8e271b.myshopify.com/products/the-out-of-stock-snowboard)
 
 Hint: Focus on the product__info-wrapper section and its data bindings
 {% endcomment %}
@@ -78,7 +77,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
     >
   {%- endif -%}
 
-  {% assign variant_images = product.images | map: 'src' %}
+    {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
 
   <div class="page-width">
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
@@ -118,7 +117,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                 <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
-                    use_variant: true,
+                    use_variant: false,
                     show_badges: true,
                     price_class: 'price--large'
                   -%}
@@ -145,7 +144,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                 </div>
               {%- when 'inventory' -%}
                 <p
-                  class="product__inventory no-js-hidden{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
+                  class="product__inventory no-js-hidden{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
                   {{ block.shopify_attributes }}
                   id="Inventory-{{ section.id }}"
                   role="status"
@@ -267,7 +266,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                       </button>
                       <input
                         class="quantity__input"
-                        type="number" 
+                        type="string" 
                         name="quantity"
                         id="Quantity-{{ section.id }}"
                         data-cart-quantity="{{ cart_qty }}"
