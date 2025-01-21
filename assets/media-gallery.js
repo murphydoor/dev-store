@@ -46,7 +46,7 @@ if (!customElements.get("media-gallery")) {
 
       setActiveMedia(mediaId, prepend) {
         const activeMedia = this.elements.viewer.querySelector(
-          `[data-media-id="${mediaid}"]`
+          `[data-media-id="${mediaId}"]`
         );
         this.elements.viewer
           .querySelectorAll("[data-media-id]")
@@ -59,7 +59,7 @@ if (!customElements.get("media-gallery")) {
           activeMedia.parentElement.prepend(activeMedia);
           if (this.elements.thumbnails) {
             const activeThumbnail = this.elements.thumbnails.querySelector(
-              `[data-target="${mediaid}"]`
+              `[data-target="${mediaId}"]`
             );
             activeThumbnail.parentElement.prepend(activeThumbnail);
           }
