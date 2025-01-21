@@ -88,7 +88,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
           id="ProductInfo-{{ section.id }}"
           data-section="{{ section.id }}"
           data-url="{{ product.url }}"
-            data-static-price="true"
+            {% comment %} data-static-price="false" {% endcomment %}
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
@@ -117,7 +117,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                 <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
-                    use_variant: false,
+                    use_variant: true,
                     show_badges: true,
                     price_class: 'price--large'
                   -%}
@@ -256,6 +256,14 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                       >
                     </span>
                   </label>
+                  {% comment %} I should have used AI when on the call, I may have actually figured out the issues haha
+                   here is a link to my chat with chatgpt to solve the two issues I missed. 
+                   https://chatgpt.com/share/67902860-1b90-800f-bac0-3461f64bd596 
+                   
+                   Additionally, I noticed that once the media bug was fixed that it corrected the pricing 
+                   issue you and I experienced on my call. So, there is something there that was causing the pricing not
+                   to properly update if the mediaId was also no correct...
+                  {% endcomment %}
                   <div class="price-per-item__container">
                     <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
                       <button class="quantity__button no-js-hidden" name="minus" type="button">
@@ -266,7 +274,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                       </button>
                       <input
                         class="quantity__input"
-                        type="text"
+                        type="number"
                         name="quantity"
                         id="Quantity-{{ section.id }}"
                         data-cart-quantity="{{ cart_qty }}"
