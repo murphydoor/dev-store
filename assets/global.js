@@ -156,8 +156,9 @@ class QuantityInput extends HTMLElement {
   constructor() {
     super();
     this.input = this.querySelector('input');
-    this.changeEvent = new Event('change', { bubbles: true });
-    this.input.addEventListener('change', this.onInputChange.bind(this));
+    // firstly you needed to change the change event to an input so it runs each time it is changed.
+    this.changeEvent = new Event('input', { bubbles: false });
+    this.input.addEventListener('input', this.onInputChange.bind(this));
     this.querySelectorAll('button').forEach((button) =>
       button.addEventListener('click', this.onButtonClick.bind(this))
     );
@@ -176,20 +177,22 @@ class QuantityInput extends HTMLElement {
     }
   }
 
-  onInputChange(event) {
+  onInputChange() {
+    console.log("inputChange")
     this.validateQtyRules();
   }
 
   onButtonClick(event) {
     event.preventDefault();
     const previousValue = this.input.value;
-
     event.target.name === 'plus' ? this.input.stepUp() : this.input.stepDown();
     if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
   }
 
   validateQtyRules() {
+    console.log("quantity rules")
     const value = parseInt(this.input.value);
+    console.log(value);
     if (this.input.min) {
       const min = parseInt(this.input.min);
       const buttonMinus = this.querySelector(".quantity__button[name='minus']");
