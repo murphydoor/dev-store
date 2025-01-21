@@ -88,7 +88,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
           id="ProductInfo-{{ section.id }}"
           data-section="{{ section.id }}"
           data-url="{{ product.url }}"
-            data-static-price="false"
+            data-static-price="true"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
@@ -279,7 +279,9 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                         step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
                         value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
                         form="{{ product_form_id }}"
+                        required
                         oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        onblur="if (this.value == '') this.value = 1;"
                       >
                       <button class="quantity__button no-js-hidden" name="plus" type="button">
                         <span class="visually-hidden">
