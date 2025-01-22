@@ -76,6 +76,17 @@ Hint: Focus on the product__info-wrapper section and its data bindings
     >
   {%- endif -%}
 
+  {% comment %}
+Exercise: Debug the Product Variant Selection Issues
+
+Bugs to find:
+1. Price not updating when variant is selected - check product-info data attributes (https://quickstart-dc8e271b.myshopify.com/products/selling-plans-ski-wax)
+2. Product media gallery not syncing with variant selection - investigate variant-media relationship (https://quickstart-dc8e271b.myshopify.com/products/selling-plans-ski-wax)
+3. Quantity selector allows invalid values - check input validation (https://quickstart-dc8e271b.myshopify.com/products/the-out-of-stock-snowboard)
+
+Hint: Focus on the product__info-wrapper section and its data bindings
+{% endcomment %}
+
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   {% comment %} Nice find! You're on the right track, but this isn't where the bug is. Go look in media-gallery.js {% endcomment %}
   <div class="page-width">
@@ -88,7 +99,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
           id="ProductInfo-{{ section.id }}"
           data-section="{{ section.id }}"
           data-url="{{ product.url }}"
-            data-static-price="true"
+          data-static-price="true"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
@@ -117,9 +128,9 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                 <div class="no-js-hidden" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
-                    use_variant: false,
+                    use_variant: true,
                     show_badges: true,
-                    price_class: 'price--large'
+                    price_class: 'pric--large'
                   -%}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
@@ -266,7 +277,7 @@ Hint: Focus on the product__info-wrapper section and its data bindings
                       </button>
                       <input
                         class="quantity__input"
-                        type="text"
+                        type="number"
                         name="quantity"
                         id="Quantity-{{ section.id }}"
                         data-cart-quantity="{{ cart_qty }}"
